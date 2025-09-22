@@ -453,7 +453,7 @@ handle_keepalive(KAState, #context{ wsreq=WSReq, ka_attempts=KAAttempts }=Contex
                 % {error, _} = Reason ->
                 %     disconnect(Reason, Context)
             % end
-                    
+
     end.
 
 -spec handle_info(Info :: term(), #context{}) ->
@@ -552,9 +552,8 @@ handle_websocket_frame(Data, #context{}=Context0) ->
                                       handler={Handler, HState0},
                                       wsreq=WSReqN,
                                       buffer=BufferN}};
-        {close, _Reason, WSReqN} ->
-            {next_state, disconnected, Context#context{wsreq=WSReqN,
-                                                       buffer= <<>>}}
+        {close, Reason, WSReqN} ->
+            disconnect(Reason, Context#context{wsreq=WSReqN, buffer= <<>>})
     end.
 
 
